@@ -114,16 +114,4 @@ class HealthCheckControllerTest extends WebTestCase
         $this->assertInternalType('bool', $data['redis']);
         $this->assertFalse($data['redis']);
     }
-
-    public function testLazyAction()
-    {
-        $client = static::createClient(['environment' => 'test_lazy']);
-        $client->request('GET', '/');
-        $this->assertEquals(404, $client->getResponse()->getStatusCode());
-    }
-
-    public static function getLazyRedis()
-    {
-        throw new \Exception('Should not be called');
-    }
 }

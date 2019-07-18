@@ -15,7 +15,7 @@ class HealthCheckControllerTest extends WebTestCase
             // This env uses a sqlite connection and fakes the redis server
             $client = static::createClient();
 
-            $redis = $this->getMockBuilder(\Redis::class)
+            $redis = $this->getMockBuilder("\Redis")
                 ->setMethods(['ping'])
                 ->getMock();
             $redis->method('ping')->willReturn(true);

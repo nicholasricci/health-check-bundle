@@ -33,9 +33,9 @@ class EkreativeHealthCheckExtension extends Extension
             return new Reference($service);
         }, $config['optional_redis']);
 
-        $def = new Definition(HealthCheckController::class, $args);
+        $def = new Definition("Ekreative\HealthCheckBundle\Controller\HealthCheckController", $args);
         $def->addTag('controller.service_arguments');
 
-        $container->addDefinitions([HealthCheckController::class => $def]);
+        $container->addDefinitions(["Ekreative\HealthCheckBundle\Controller\HealthCheckController" => $def]);
     }
 }

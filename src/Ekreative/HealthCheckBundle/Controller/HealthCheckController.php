@@ -177,10 +177,8 @@ class HealthCheckController
         }
     }
 
-
-
     /**
-     * @param \Redis $redis
+     * @param \Predis\Client $predis
      *
      * @return bool
      */

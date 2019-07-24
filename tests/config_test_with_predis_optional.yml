@@ -14,27 +14,16 @@ doctrine:
     dbal:
         connections:
             default:
-                driver: pdo_mysql
-                host: '127.0.0.1'
-                user: root
-                options:
-                    !php/const PDO::ATTR_TIMEOUT: 1
+                driver: pdo_sqlite
+                path: '%kernel.cache_dir%/db.sqlite'
 
 ekreative_health_check:
-    redis:
-        - 'redis'
-    predis:
+    optional_predis:
         - 'predis'
 
 services:
-    redis:
-        class: Redis
-        factory: Ekreative\HealthCheckBundle\DependencyInjection\RedisFactory::get
-        arguments:
-            $host: '127.0.0.1'
-
     predis:
         class: Predis\Client
         factory: Ekreative\HealthCheckBundle\DependencyInjection\PredisFactory::get
         arguments:
-            $parameters: '127.0.0.1:6937'
+            $parameters: 'example.com:6937'

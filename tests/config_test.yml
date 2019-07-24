@@ -20,8 +20,13 @@ doctrine:
 ekreative_health_check:
     redis:
         - 'redis'
+    predis:
+        - 'predis'
 
 services:
     redis:
         class: Redis
+        public: true
+    predis:
+        class: Predis\Client
         public: true

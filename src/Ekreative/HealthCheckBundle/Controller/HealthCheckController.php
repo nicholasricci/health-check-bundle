@@ -34,13 +34,32 @@ class HealthCheckController
      */
     private $optionalRedis;
 
-    public function __construct(ManagerRegistry $doctrine, array $connections, $optionalConnections, array $redis, array $optionalRedis)
-    {
+    /**
+     * @var \Predis\Client[]
+     */
+    private $predis;
+
+    /**
+     * @var \Predis\Client[]
+     */
+    private $optionalPredis;
+
+    public function __construct(
+        ManagerRegistry $doctrine,
+        array $connections,
+        $optionalConnections,
+        array $redis,
+        array $optionalRedis,
+        array $predis,
+        array $optionalPredis
+    ) {
         $this->doctrine = $doctrine;
         $this->connections = $connections;
         $this->optionalConnections = $optionalConnections;
         $this->redis = $redis;
         $this->optionalRedis = $optionalRedis;
+        $this->predis = $predis;
+        $this->optionalPredis = $optionalPredis;
     }
 
     /**
@@ -105,6 +124,22 @@ class HealthCheckController
             $key = "redis$i";
         }
 
+        $i = 0;
+        $key = 'predis';
+        if ((count($this->predis) + count($this->optionalPredis)) > 1) {
+            $key .= "$i";
+        }
+        foreach ($this->predis as $redis) {
+            $data[$key] = $required[$key] = $this->checkpredisConnection($redis);
+            ++$i;
+            $key = "predis$i";
+        }
+        foreach ($this->optionalPredis as $redis) {
+            $data[$key] = $this->checkPredisConnection($redis);
+            ++$i;
+            $key = "predis$i";
+        }
+
         restore_error_handler();
 
         $ok = array_reduce($required, function ($m, $v) {
@@ -135,6 +170,24 @@ class HealthCheckController
     {
         try {
             $redis->ping();
+
+            return true;
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+
+
+    /**
+     * @param \Redis $redis
+     *
+     * @return bool
+     */
+    private function checkPredisConnection($predis)
+    {
+        try {
+            $predis->ping();
 
             return true;
         } catch (\Exception $e) {

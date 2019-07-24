@@ -32,6 +32,14 @@ class EkreativeHealthCheckExtension extends Extension
             return new Reference($service);
         }, $config['optional_redis']);
 
+        $args[] = array_map(function ($service) {
+            return new Reference($service);
+        }, $config['predis']);
+
+        $args[] = array_map(function ($service) {
+            return new Reference($service);
+        }, $config['optional_predis']);
+
         $def = new Definition("Ekreative\HealthCheckBundle\Controller\HealthCheckController", $args);
         $def->addTag('controller.service_arguments');
 

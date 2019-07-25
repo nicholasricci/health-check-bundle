@@ -24,6 +24,7 @@ class PredisFactory
         try {
             $redis->connect();
         } catch (\Predis\Connection\ConnectionException $e) {
+        } catch (\Predis\ClientException $e) {
         } catch (\ErrorException $e) {
         }
 

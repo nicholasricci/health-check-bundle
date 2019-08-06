@@ -4,14 +4,28 @@ A bundle that provides a simple `/healthcheck` route
 
 [![Latest Stable Version](https://poser.pugx.org/ekreative/health-check-bundle/v/stable.png)](https://packagist.org/packages/ekreative/health-check-bundle)
 [![License](https://poser.pugx.org/ekreative/health-check-bundle/license.png)](https://packagist.org/packages/ekreative/health-check-bundle)
-[![Build Status](https://travis-ci.org/ekreative/health-check-bundle.svg?branch=master)](https://travis-ci.org/ekreative/health-check-bundle)
+[![Build Status](https://api.travis-ci.com/nicholasricci/health-check-bundle.svg?branch=sf-2.8)](https://travis-ci.org/nicholasricci/health-check-bundle)
 
 ## Install
 
 ### Composer
 
+To use this fork you need to add to your `composer.json` file this repository:
+```json
+{
+  ...
+  "repositories": [
+    {
+        "type": "vcs",
+        "url": "https://github.com/nicholasricci/health-check-bundle"
+    }
+  ],
+  ...
+}
+```
+
 ```bash
-composer require ekreative/health-check-bundle
+composer require ekreative/health-check-bundle:0.2.*
 ```
 
 ### AppKernel
@@ -105,6 +119,8 @@ service names to check
 ekreative_health_check:
     redis:
         - 'redis'
+    predis:
+        - 'predis'
 ```
 
 You can also list redis connections that should be checked, but don't cause a failure
@@ -113,6 +129,8 @@ You can also list redis connections that should be checked, but don't cause a fa
 ekreative_health_check:
     optional_redis:
         - 'redis.optional'
+    optional_predis:
+        - 'predis.optional'
 ```
 
 #### Timeout
@@ -141,4 +159,16 @@ services:
         factory: Ekreative\HealthCheckBundle\DependencyInjection\RedisFactory::get
         arguments:
             $host: 'example.com'
+```
+
+If you don't want to use Redis C extension, you can use Predis client. Is the same of Redis configuration
+but with some adjustment:
+
+```yaml
+services:
+    predis:
+        class: Predis\Client
+        factory: Ekreative\HealthCheckBundle\DependencyInjection\PredisFactory::get
+        arguments:
+          $parameters: 'example.com:6379'
 ```

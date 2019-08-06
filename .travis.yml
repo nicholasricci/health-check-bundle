@@ -9,6 +9,7 @@ services:
 matrix:
   include:
     - php: 5.4
+      dist: trusty
       env: SYMFONY_VERSION='^2.8'
   fast_finish: true
 
